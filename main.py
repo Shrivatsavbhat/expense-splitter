@@ -2,8 +2,13 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from typing import List
 from pydantic import model_validator
+#Import from the files
+from app.database import engine
+from app import models
 
 app= FastAPI()
+
+models.Base.metadata.create_all(bind=engine)
 
 class Expense(BaseModel):
     description: str
