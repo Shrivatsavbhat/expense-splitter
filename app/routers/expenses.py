@@ -1,4 +1,9 @@
-from fastapi import APIRouter
+
+from fastapi import APIRouter, Depends, HTTPException, Response
+from sqlalchemy.orm import Session
+from app.database import get_db
+from app import models
+from app.schemas import Expense
 
 router = APIRouter()
 
@@ -37,6 +42,3 @@ def delete_expense(id:int, db:Session = Depends(get_db)):
     db.commit()
     return Response(status_code=204)
     
-@router.get("/")
-def read_root():
-    return {"message":" Hello World"}
