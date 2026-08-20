@@ -1,9 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from pydantic import BaseModel, Field
 from typing import List
 from pydantic import model_validator
+from sqlalchemy.orm import Session  
 #Import from the files
-from app.database import engine
+from app.database import engine, get_db
 from app import models
 
 app= FastAPI()
@@ -23,8 +24,18 @@ class Expense(BaseModel):
         return self
 
 @app.post("/expenses")
-def create_expense(expense: Expense):
-    return expense
+def create_expense(expense: Expense, db: Session = Depends(get_db)):
+    db_expense = models.Expense(
+    description=expense.description,
+    amount=expense.amount,
+    paid_by=expense.paid_by,
+    split_between=expense.split_between
+
+    )
+    db.add(db_expense)
+    db.commit()
+    db.refresh(db_expense)
+    return db_expense
 
 @app.get("/")
 def read_root():
