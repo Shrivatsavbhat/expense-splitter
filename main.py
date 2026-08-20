@@ -37,6 +37,11 @@ def create_expense(expense: Expense, db: Session = Depends(get_db)):
     db.refresh(db_expense)
     return db_expense
 
+@app.get("/expenses")
+def read_expenses(db:Session = Depends(get_db)):
+    expenses= db.query(models.Expense).all()
+    return expenses
+
 @app.get("/")
 def read_root():
     return {"message":" Hello World"}
