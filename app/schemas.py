@@ -15,3 +15,12 @@ class Expense(BaseModel):
         if self.paid_by not in self.split_between:
             raise ValueError("Paid by must be in split between")
         return self
+
+
+class UserCreate(BaseModel):
+    email: str
+    password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str

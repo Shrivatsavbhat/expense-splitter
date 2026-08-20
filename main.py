@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
   
 #Import from the files
-from app.routers import expenses
+from app.routers import expenses, auth
 from app.database import engine
 from app import models
 
@@ -10,6 +10,7 @@ app= FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
 
+app.include_router(auth.router)
 app.include_router(expenses.router)
 
 @app.get("/")
