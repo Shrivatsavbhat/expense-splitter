@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Response
 from pydantic import BaseModel, Field
 from typing import List
 from pydantic import model_validator
@@ -49,6 +49,15 @@ def read_expense(id: int, db:Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Expense not found")
     return expense
 
+@app.delete("/expenses/{id}")
+def delete_expense(id:int, db:Session = Depends(get_db)):
+    expense= db.query(models.Expense).filter(models.Expense.id == id).first()
+    if expense is None:
+        raise HTTPException(status_code=404, detail="Expense not found")
+    db.delete(expense)
+    db.commit()
+    return Response(status_code=204)
+    
 @app.get("/")
 def read_root():
     return {"message":" Hello World"}
