@@ -8,7 +8,7 @@ from app.core import get_current_user
 
 router = APIRouter()
 
-@router.post("/expenses")
+@router.post("/expenses/add")
 def create_expense(expense: Expense, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     db_expense = models.Expense(
     description=expense.description,
